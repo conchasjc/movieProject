@@ -20,11 +20,14 @@
               </div>
               @endif
             <form action="/updateData{{$post->id}}" method="Post" class="form" enctype="multipart/form-data">
-                {{ csrf_field() }}
+              
+              {{ csrf_field() }}
                
                   <div class="form-group">
                   <label for="m_name" >Movie Name</label>
           
+                  <input type="hidden"  name="movieId" id="m_id" class="form-control col-12" >
+                   
                   <input type="text"  name="movieName" id="m_name" placeholder="Enter Movie Name" class="form-control col-12" >
                    
                 </div>

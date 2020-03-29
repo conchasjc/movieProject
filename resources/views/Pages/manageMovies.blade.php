@@ -7,9 +7,10 @@
         <div class="col-12 ml-auto ">
           <form action="/manageSearch" method="GET" class="form">
             <label for="searchMovie">Search:
-            <input type="text" class="input" name="searchTable" placeholder="Search Movies" id="searchMovie">
-            <button class="btn btn-primary"><i class="fas fa-search"></i></button>
+            <input type="text" class="input form-control" name="searchTable" placeholder="Search Movies" id="searchMovie">
+           
           </label>
+          <button class="btn btn-primary mb-1"><i class="fas fa-search"></i></button>
           </form>
           <br>
           <button class="btn btn-success float-right " data-toggle="modal" data-target="#myModal">Add Movie</button>
@@ -48,13 +49,14 @@
                   @if (count($posts)>0)
                   @foreach ($posts as $post)
                   <tr>
-                    @include('/component/updateModal')
-                  <th scope="row">{{$post->id}}</th>
+                   
+                  <td scope="row">{{$post->id}}</td>
                   <td>{{$post->movieImage}}</td>
                   <td>{{$post->movieName}}</td>
                   <td>{{$post->movieGenre}}</td>
                   <td>{{$post->showingDate}}</td>
                   <td>{{$post->description}}</td>
+                  @include('/component/updateModal')
                    <td>
                      <button href="" class="btn btn-success col-12 updateButton" ><i class="fas fa-edit"></i></button>
                     </td>

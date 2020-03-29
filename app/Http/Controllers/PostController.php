@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\post;
 class PostController extends Controller
 {
@@ -73,13 +74,43 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function viewContent($id)
+    {
+        $posts=post::findorfail($id);
+        return view('Pages.contentMovie')->with('posts',$posts);
+
+    }
+     
     public function search(Request $request)
     {
         $search=$request->get('search');
-        $posts=post::where('movieName','like','%'.$search.'%')->paginate(6);
-        return view('Pages.viewMovies',['posts'=>$posts]);
-
-    } public function searchManage(Request $request)
+     
+        $searchBy=$request->get('movieGenre');
+       
+        $orderBy=$request->get('movieSort');
+        if ($orderBy=='asc') {
+       
+         $posts=post::orderBy('movieName','asc')->where($searchBy,'like','%'.$search.'%')->paginate(6);     
+        }
+        else if ($orderBy=='desc') {
+       
+            $posts=post::orderBy('movieName','desc')->where($searchBy,'like','%'.$search.'%')->paginate(6);     
+        
+        }
+        else
+        {
+            $posts=post::where('movieName','like','%'.$search.'%')->paginate(6);     
+        
+        }
+   
+        
+      
+        $links=$posts->links();
+        return view('Pages.viewMovies',compact('posts','links'));
+        
+ 
+       } 
+    public function searchManage(Request $request)
     {
         $searchTable=$request->get('searchTable');
         $posts=post::where('movieName','like','%'.$searchTable.'%')->paginate(6);
@@ -113,17 +144,16 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
-        $editMovie = post::find($id);
+        $editMovie = post::findorfail($request->get('movieId'));
         $editMovie->movieName= $request->get('movieName');
         $editMovie->movieGenre= $request->get('movieGenre');
         $editMovie->showingDate= $request->get('dateSelect');
         $editMovie->description= $request->get('movieDescription');
         $editMovie->save();
         $postingM= post::orderBy('id','desc')->paginate(10);
-        return view('Pages.manageMovies')->with('posts', $postingM);
+        return back();
     }
 
     /**
